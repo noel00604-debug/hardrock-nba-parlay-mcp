@@ -14,6 +14,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_PROJECT_ENVIRONMENT=/app/.venv
 
+# poppler-utils provides pdftotext, used to read the official NBA injury report PDF.
+RUN apt-get update && apt-get install -y --no-install-recommends poppler-utils && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Dependency layer first so source edits do not reinstall packages.

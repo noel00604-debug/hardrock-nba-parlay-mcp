@@ -712,9 +712,24 @@ def _fetch_props(ctx: RequestContext, events: list[S.Event], data: MarketData) -
         if event.event_id in data.props_fetched_for:
             continue
         _guard_credits(ctx)
-        result = _odds(ctx).fetch_event_props(
-            event.event_id, _prop_books(ctx.settings), list(PROP_MARKETS), True
-        )
+        try:
+            result = _odds(ctx).fetch_event_props(
+                event.event_id, _prop_books(ctx.settings), list(PROP_MARKETS), True
+            )
+        except ProviderError as exc:
+            if "PROVIDER_CREDIT_GUARD" not in exc.reason_codes:
+                raise
+            # The app-wide daily credit guard tripped part-way through the slate: keep what was already
+            # fetched (those credits are spent) and say which games have no prop coverage.
+            missing = [e.short_name for e in events if e.event_id not in data.props_fetched_for]
+            data.warnings.append(
+                "PROVIDER_CREDIT_GUARD: daily provider credit guard reached before player props were fetched for "
+                + ", ".join(missing)
+                + f" ({redact(exc.message)}); raise HRNBA_DAILY_PROVIDER_CREDIT_BUDGET deliberately if you want more"
+            )
+            if "PROVIDER_CREDIT_GUARD" not in data.reason_codes:
+                data.reason_codes.append("PROVIDER_CREDIT_GUARD")
+            return
         data.absorb(result)
         _split_quotes(ctx, list(result.data), data)
         data.props_fetched_for.append(event.event_id)

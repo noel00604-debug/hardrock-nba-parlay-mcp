@@ -155,9 +155,23 @@ def _parse_rows(text: str) -> ParsedInjuryReport:
     matchup: str | None = None
     team: str | None = None
     last_row: dict[str, Any] | None = None
+    # Reason text that wraps in the PDF is printed on its own line, sometimes ABOVE the player's row and
+    # sometimes below it; a blank line separates one player's block from the next. Orphan reason lines
+    # are held in `pending` until we know whether they prefix the next row or continue the previous one.
+    pending: list[str] = []
+
+    def flush_pending() -> None:
+        if pending and last_row is not None:
+            extra = " ".join(pending)
+            last_row["reason"] = f"{last_row['reason']} {extra}".strip() if last_row.get("reason") else extra
+        pending.clear()
+
     for raw_line in text.splitlines():
         line = raw_line.strip()
-        if not line or line.startswith("#") or _PAGE_RE.match(line):
+        if not line:
+            flush_pending()
+            continue
+        if line.startswith("#") or _PAGE_RE.match(line):
             continue
         if report_ts is None:
             ts = _header_timestamp(line)
@@ -195,14 +209,19 @@ def _parse_rows(text: str) -> ParsedInjuryReport:
             elif player is not None and status is None and tok.lower() in _STATUS_WORDS:
                 status, recognised = _STATUS_WORDS[tok.lower()], True
             elif not recognised and last_row is not None and player is None:
-                # wrapped reason continuation
-                last_row["reason"] = f"{last_row['reason']} {tok}".strip() if last_row.get("reason") else tok
+                # wrapped reason text on its own line: decided once the next row (or a blank line) is seen
+                pending.append(tok)
                 recognised = True
             else:
                 reason_parts.append(tok)
             idx += 1
         if player is None:
             continue
+        if pending:
+            if reason_parts:
+                flush_pending()  # the orphan text continued the previous player's reason
+            else:
+                reason_parts, pending[:] = list(pending), []  # it was the start of this player's reason
         if player != NOT_YET_SUBMITTED and status is None:
             warnings.append(f"row for {player!r} has no recognised status; recorded as UNKNOWN")
         row = {
@@ -216,6 +235,7 @@ def _parse_rows(text: str) -> ParsedInjuryReport:
         }
         rows.append(row)
         last_row = row
+    flush_pending()
     return ParsedInjuryReport(report_ts, rows, warnings)
 
 
@@ -313,13 +333,40 @@ def parse_injury_report_text(
     return _rows_to_context(parsed, now, slate, source_url)
 
 
+def _pdftotext_layout(pdf_bytes: bytes) -> str | None:
+    """Return ``pdftotext -layout`` output, or None when poppler is not installed or fails."""
+    import shutil
+    import subprocess
+
+    exe = shutil.which("pdftotext")
+    if not exe:
+        return None
+    try:
+        proc = subprocess.run(
+            [exe, "-layout", "-", "-"], input=pdf_bytes, capture_output=True, timeout=30, check=False
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if proc.returncode != 0 or not proc.stdout.strip():
+        return None
+    return proc.stdout.decode("utf-8", errors="replace")
+
+
 def parse_injury_report_pdf(
     pdf_bytes: bytes,
     now: datetime,
     slate: list[S.Event] | None = None,
     source_url: str | None = None,
 ) -> list[S.InjuryContext]:
-    """Extract layout text from the PDF with pypdf and parse it."""
+    """Extract layout text from the PDF and parse it.
+
+    Poppler's ``pdftotext -layout`` reproduces the report's columns faithfully (verified on the live
+    2026-10-19 10:00 PM report); pypdf's layout mode reorders the real file, so it is only a fallback.
+    """
+    text = _pdftotext_layout(pdf_bytes)
+    if text is not None:
+        return parse_injury_report_text(text, now, slate, source_url)
+    logger.warning("pdftotext (poppler) not available; falling back to pypdf layout extraction, verify rows")
     try:
         from pypdf import PdfReader
     except ImportError as exc:  # pragma: no cover - pypdf is a declared dependency

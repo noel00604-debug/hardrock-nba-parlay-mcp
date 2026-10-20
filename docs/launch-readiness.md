@@ -26,15 +26,31 @@ Evidence collected tonight
   loaded.
 - `dist/nba-three-leg-parlays-0.1.0.zip` built (10 files, plugin folder as the single top-level entry).
 
+Live evidence added 2026-10-19 about 22:00 ET (owner's free Starter key stored in the macOS keychain)
+- The key authenticates: `x-requests-remaining` 494 after the first coverage probe; about 30 credits used tonight in total.
+- `hardrockbet_fl` is on this plan: the NFL feed returns `hardrockbet_fl`, `hardrockbet` and `hardrockbet_oh`.
+- For the three NBA games on 2026-10-20 the feed returned NO `hardrockbet_fl` markets (featured odds: only `pinnacle`;
+  region us2: `ballybet`, `betanysports`, `betparx`, `espnbet`, `fliff`, `hardrockbet`; per-event `/markets` probe for
+  `hardrockbet_fl`: nothing). `hardrockbet` is the Indiana feed and is never substituted. Re-run the coverage probe in the
+  morning; if Hard Rock Florida NBA prices are still absent, the manual path (type the prices shown in the app, or confirm a
+  screenshot's fields) is the day-one route, with Pinnacle references, DraftKings/FanDuel prop references and the official
+  injury report still live.
+- `hrnba build --date 2026-10-20 --no-props` returned "NO SUITABLE TICKET: no target-book quotes" with reason codes
+  BOOK_NOT_AVAILABLE and NO_SUITABLE_TICKET (3 credits), instead of inventing a ticket.
+- The official injury PDF (10:00 PM ET report) fetched and parsed live: 16 rows with correct teams, names, statuses and
+  wrapped reasons after switching extraction to poppler `pdftotext -layout` (pypdf reorders the real file; it remains a
+  fallback). Two defects found by this live run were fixed and covered by tests: the app-wide credit guard aborting a build
+  part-way (now a warning that names the games without props) and wrapped reason lines attached to the wrong player.
+
 ## Priority A: core day-one workflow
 
 | Feature | Access | Status |
 |---|---|---|
-| NBA schedule for the date (3 games on 2026-10-20) | automatic via The Odds API `/events` (0 credits); verified tonight from pr.nba.com, nba.com and ESPN | PASS for the verified schedule; the live `/events` call is BLOCKED until the owner's Odds API key exists |
-| Hard Rock Florida odds with source timestamps (`hardrockbet_fl`, never substituted) | automatic via The Odds API | BLOCKED: no key on this Mac; adapter tested against documented response shapes only |
-| Player props and alternate lines for `hardrockbet_fl` | automatic, per-event endpoint | BLOCKED: whether Hard Rock FL props appear in the feed is unverified; coverage tool reports it |
-| Reference prices (Pinnacle, delay caveat; fallback books) | automatic | BLOCKED: same key; skew is measured and reported, never silently loosened |
-| Official injury report (PDF, 15-minute slots) | automatic fetch, manual entry fallback | NOT TESTED live (parser tested on a text reconstruction of the Oct 19 7 PM report and a generated PDF) |
+| NBA schedule for the date (3 games on 2026-10-20) | automatic via The Odds API `/events` (0 credits); verified tonight from pr.nba.com, nba.com and ESPN | PASS live: `/events` returned the three games with the correct UTC tip times |
+| Hard Rock Florida odds with source timestamps (`hardrockbet_fl`, never substituted) | automatic via The Odds API | BLOCKED tonight: key works, but the feed returned no `hardrockbet_fl` NBA markets for 2026-10-20 (it does for NFL); re-probe in the morning, manual entry otherwise |
+| Player props and alternate lines for `hardrockbet_fl` | automatic, per-event endpoint | BLOCKED tonight: the per-event `/markets` probe listed no `hardrockbet_fl` markets for any of the three games; reference books list all four prop markets for 3 of 3 games |
+| Reference prices (Pinnacle, delay caveat; fallback books) | automatic | PASS live: Pinnacle featured markets and DraftKings/FanDuel/Pinnacle props returned for all three games; skew not measurable until a target leg exists |
+| Official injury report (PDF, 15-minute slots) | automatic fetch, manual entry fallback | PASS live (10:00 PM ET report, 16 rows, report time parsed) via poppler; manual entry remains available |
 | Freshness checks (180 s odds age, 60 s reference skew, started game) | n/a | PASS (unit and fixture flow) |
 | Leg analysis with facts, interpretations, data grade, probability state, price value | n/a | PASS (fixture flow) |
 | Exactly-three validation, duplicates, contradictions, nested, mutually exclusive | n/a | PASS (unit) |

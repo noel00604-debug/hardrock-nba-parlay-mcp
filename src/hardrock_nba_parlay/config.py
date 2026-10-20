@@ -75,7 +75,7 @@ class Settings(BaseSettings):
     http_max_retries: int = 3
     provider_cache_ttl_seconds: int = 60
     daily_provider_credit_budget: int = Field(
-        default=25,
+        default=60,
         description="App-wide guard on The Odds API credits per ET day; the free Starter plan is 500/month (about 16/day), the 20K plan about 650/day",
     )
     per_user_daily_credit_quota: int = Field(

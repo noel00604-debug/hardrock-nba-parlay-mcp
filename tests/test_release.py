@@ -481,7 +481,7 @@ def test_docs_exist_and_carry_required_markers() -> None:
         ],
         "sources.md": ["the-odds-api.com", "support.claude.com", "Retrieved (UTC)", "mcp | 2.3.0"],
         "install.md": [
-            "NOT YET TESTED",
+            "NOT TESTED",
             "--plugin-dir",
             "claude mcp add --transport http",
             "Upload plugin",
@@ -501,7 +501,7 @@ def test_docs_exist_and_carry_required_markers() -> None:
             "record_actual_bet",
             "get_performance",
         ],
-        "launch-readiness.md": ["PENDING INTEGRATION TEST", "manual", "automatic", "13.H", "NOT SUBMITTED"],
+        "launch-readiness.md": ["PASS", "BLOCKED", "manual", "automatic", "13.H", "NOT SUBMITTED"],
     }
     for name, markers in expectations.items():
         text = (DOCS / name).read_text(encoding="utf-8")

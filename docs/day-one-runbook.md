@@ -36,6 +36,16 @@ Confirm it resolves (prints only yes or no, never the value):
 The coverage report says, per market, whether Hard Rock Florida prices came back, whether Pinnacle reference
 prices paired with them within the 60-second skew rule, and whether the injury report was fetched.
 
+## 3a. If the coverage report says Hard Rock Florida is BLOCKED
+
+On the evening of 2026-10-19 the feed had no Hard Rock Florida NBA markets for opening night (it does carry
+Hard Rock Florida for the NFL, so the key and plan are fine). If that is still true in the morning, use the
+manual path: open the Hard Rock Bet app, read the exact prices of the legs you are considering, and give them
+to Claude ("analyze my parlay: DET +3.5 at -110, PHI/NYK over 224.5 at -110, OKC ML at -150, from
+Hard Rock Florida"). The tool then applies the live Pinnacle references, the official injury report, the
+correlation checks and the budget rules to your typed legs. A bet-slip screenshot works the same way after you
+confirm the fields Claude reads from it.
+
 ## 4. Build candidates (about 15 credits)
 
 ```bash
