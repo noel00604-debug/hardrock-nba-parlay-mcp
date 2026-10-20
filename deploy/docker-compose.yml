@@ -1,0 +1,46 @@
+# Local PostgreSQL test for the hosted server. No credentials are stored in this file:
+# export POSTGRES_PASSWORD, HRNBA_SECRET_KEY and (optionally) HRNBA_ODDS_API_KEY in your shell first.
+#
+#   export POSTGRES_PASSWORD=<pick one>  HRNBA_SECRET_KEY=<64 random hex chars>
+#   docker compose -f deploy/docker-compose.yml up --build
+#
+# Then open http://localhost:8080/healthz. The MCP endpoint is http://localhost:8080/mcp.
+# Claude Code can attach with: claude mcp add --transport http hrnba-local http://localhost:8080/mcp
+# claude.ai cannot reach localhost; see deploy/README.md section 8 for the tunnel smoke test.
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: hrnba
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?export POSTGRES_PASSWORD in your shell}
+      POSTGRES_DB: hrnba
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - hrnba_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hrnba -d hrnba"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  server:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    environment:
+      HRNBA_AUTH_MODE: builtin_oauth
+      HRNBA_PUBLIC_URL: http://localhost:8080
+      HRNBA_DATABASE_URL: postgresql+psycopg://hrnba:${POSTGRES_PASSWORD}@db:5432/hrnba
+      HRNBA_SECRET_KEY: ${HRNBA_SECRET_KEY:?export HRNBA_SECRET_KEY in your shell}
+      HRNBA_ODDS_API_KEY: ${HRNBA_ODDS_API_KEY:-}
+      HRNBA_LOG_LEVEL: INFO
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  hrnba_pgdata:

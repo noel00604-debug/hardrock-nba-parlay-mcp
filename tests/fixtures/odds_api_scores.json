@@ -1,0 +1,31 @@
+{
+  "data_mode": "FIXTURE",
+  "note": "FIXTURE: shape of GET /v4/sports/basketball_nba/scores?daysFrom=1 per the vendor docs: completed flag, scores as {name, score-as-string}, last_update null until the game starts. Scores are synthetic.",
+  "body": [
+    {
+      "id": "1f3a0c4e6b8d2a5c7e9f1b3d5a7c9e0b",
+      "sport_key": "basketball_nba",
+      "sport_title": "NBA",
+      "commence_time": "2026-10-20T19:00:00Z",
+      "completed": true,
+      "home_team": "Detroit Pistons",
+      "away_team": "Boston Celtics",
+      "scores": [
+        {"name": "Detroit Pistons", "score": "108"},
+        {"name": "Boston Celtics", "score": "112"}
+      ],
+      "last_update": "2026-10-20T21:40:11Z"
+    },
+    {
+      "id": "3b5c7d9e1f2a4b6c8d0e2f4a6b8c0d1e",
+      "sport_key": "basketball_nba",
+      "sport_title": "NBA",
+      "commence_time": "2026-10-21T01:30:00Z",
+      "completed": false,
+      "home_team": "San Antonio Spurs",
+      "away_team": "Oklahoma City Thunder",
+      "scores": null,
+      "last_update": null
+    }
+  ]
+}

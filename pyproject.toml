@@ -1,0 +1,49 @@
+[project]
+name = "hardrock-nba-parlay-mcp"
+version = "0.1.0"
+description = "Research exactly-three-leg NBA parlays on Hard Rock Bet Florida: odds, injury context, correlation checks, and a user-confirmed wager ledger with a daily budget. MCP server + CLI."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Noel Fernandez" }]
+dependencies = [
+  "mcp>=2.3,<3",
+  "pydantic>=2.7",
+  "pydantic-settings>=2.3",
+  "httpx>=0.27",
+  "sqlalchemy>=2.0",
+  "psycopg[binary]>=3.1",
+  "typer>=0.12",
+  "pypdf>=4.0",
+  "argon2-cffi>=23.1",
+  "cryptography>=42",
+  "itsdangerous>=2.1",
+  "uvicorn>=0.30",
+  "starlette>=0.37",
+]
+
+[project.scripts]
+hrnba = "hardrock_nba_parlay.cli:app"
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.5", "respx>=0.21", "anyio>=4"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hardrock_nba_parlay"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = ["error::DeprecationWarning:hardrock_nba_parlay.*", "ignore::DeprecationWarning:mcp.*"]

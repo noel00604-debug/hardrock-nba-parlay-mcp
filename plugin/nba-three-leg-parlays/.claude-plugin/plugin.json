@@ -1,0 +1,21 @@
+{
+  "name": "nba-three-leg-parlays",
+  "displayName": "NBA Three-Leg Parlay Analyst",
+  "version": "0.1.0",
+  "description": "Research exactly three-leg NBA parlays on Hard Rock Bet Florida with current odds, injury context, correlation checks, and tracking of user-confirmed wagers. Includes a configurable daily budget, initially $10.",
+  "author": {
+    "name": "Noel Fernandez"
+  },
+  "license": "MIT",
+  "keywords": [
+    "nba",
+    "parlay",
+    "three-leg",
+    "sports-betting-research",
+    "hard-rock-bet",
+    "florida",
+    "odds",
+    "injury-report",
+    "budget-ledger"
+  ]
+}

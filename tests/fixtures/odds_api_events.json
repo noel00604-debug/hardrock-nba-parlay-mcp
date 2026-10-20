@@ -1,0 +1,30 @@
+{
+  "data_mode": "FIXTURE",
+  "note": "FIXTURE: shape of GET /v4/sports/basketball_nba/events per the vendor docs (docs/research/the-odds-api.md section 5). Ids are made up; the matchups and tip times are the real 2026-10-20 slate.",
+  "body": [
+    {
+      "id": "1f3a0c4e6b8d2a5c7e9f1b3d5a7c9e0b",
+      "sport_key": "basketball_nba",
+      "sport_title": "NBA",
+      "commence_time": "2026-10-20T19:00:00Z",
+      "home_team": "Detroit Pistons",
+      "away_team": "Boston Celtics"
+    },
+    {
+      "id": "2a4b6c8d0e1f3a5b7c9d1e3f5a7b9c0d",
+      "sport_key": "basketball_nba",
+      "sport_title": "NBA",
+      "commence_time": "2026-10-20T23:00:00Z",
+      "home_team": "New York Knicks",
+      "away_team": "Philadelphia 76ers"
+    },
+    {
+      "id": "3b5c7d9e1f2a4b6c8d0e2f4a6b8c0d1e",
+      "sport_key": "basketball_nba",
+      "sport_title": "NBA",
+      "commence_time": "2026-10-21T01:30:00Z",
+      "home_team": "San Antonio Spurs",
+      "away_team": "Oklahoma City Thunder"
+    }
+  ]
+}

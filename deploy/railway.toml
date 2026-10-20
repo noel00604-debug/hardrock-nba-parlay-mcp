@@ -1,0 +1,24 @@
+# Railway config-as-code for the MCP server service (primary hosting option).
+#
+# VERIFIED facts from the hosting research (docs.railway.com, retrieved 2026-10-19):
+#   - Railway builds from a Dockerfile at the repo root by default; a Dockerfile elsewhere
+#     is selected with the service variable RAILWAY_DOCKERFILE_PATH (set it to deploy/Dockerfile).
+#   - GitHub-linked services auto-deploy on push to the connected branch.
+#   - "Serverless" (sleep after about 5 minutes idle) is a per-service toggle under
+#     Deploy > Serverless. Leave it OFF for this server.
+#   - Region: us-east4 (Virginia). Hobby plan: $5/month including $5 of usage.
+#
+# NOT VERIFIED in this research run: the exact key names accepted by railway.toml (the
+# config-as-code reference page was not fetched). Everything below can also be set in the
+# Railway dashboard, which is the documented path in deploy/README.md. If Railway rejects
+# a key, delete this file and use the dashboard settings instead.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "deploy/Dockerfile"
+
+[deploy]
+healthcheckPath = "/healthz"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

@@ -1,0 +1,30 @@
+# FIXTURE (data_mode: FIXTURE). Text reconstruction of the official NBA injury report published 2026-10-19 07:00 PM ET
+# (https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-10-19_07_00PM.pdf), laid out the way pdftotext -layout
+# prints it, from the rows recorded in docs/research/nba-schedule-injuries.md section 3d. Not a byte-for-byte copy.
+# As in that extraction, no "New York Knicks" label appears in the PHI@NYK block, so the parser's team carry-forward
+# attributes those rows to the 76ers; that attribution is unverified.
+                                                      Injury Report: 10/19/26 07:00 PM
+Game Date    Game Time    Matchup    Team                     Player Name             Current Status    Reason
+10/20/2026   03:00 (ET)   BOS@DET    Boston Celtics           Carter, Devin           Out               Injury/Illness - Illness
+                                     Detroit Pistons          Harkless, Elijah        Questionable      G League - Two-Way
+                                                              Jones, Isaac            Out               G League - Two-Way
+                                                              Onyenso, Ugonna         Out               G League - Two-Way
+                                                              Prince, Taurean         Questionable      Personal Reasons
+             07:00 (ET)   PHI@NYK    Philadelphia 76ers       Barlow, Dominick        Out               Injury/Illness - Low Back Stress Reaction
+                                                              Bona, Adem              Questionable      Injury/Illness - Left Foot Sprain
+                                                              Fall, Tacko             Out               Injury/Illness - Left Quadriceps Strain
+                                                              Hukporti, Ariel         Out               Injury/Illness - Right Achilles Tendon Rupture /
+                                                                                                        Tear
+                                                              Simons, Anfernee        Questionable      Injury/Illness - Left Hamstring Tightness /
+                                                                                                        Soreness
+                                                              Wade, Dean              Questionable      Injury/Illness - Left Ankle Sprain
+             09:30 (ET)   OKC@SAS    Oklahoma City Thunder    Oweh, Otega             Out               Injury/Illness - Right Achilles Tendon Repair /
+                                                                                                        Surgery
+                                                              Sorber, Thomas          Out               Injury/Illness - Right Knee Surgery
+                                                              Topic, Nikola           Out               Injury/Illness - Low Back Surgery
+                                     San Antonio Spurs        Harris, Tobias          Out               Injury/Illness - Left Calf Strain
+                                                                                                                                 Page 1 of 2
+                                                      Injury Report: 10/19/26 07:00 PM
+Game Date    Game Time    Matchup    Team                     Player Name             Current Status    Reason
+                                                              Quaintance, Jayden      Out               Injury/Illness - Right Knee Surgery
+                                                                                                                                 Page 2 of 2

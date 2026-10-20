@@ -1,0 +1,29 @@
+# secrets and local state
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+# databases and receipts
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+data/
+receipts/
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+# os / editor
+.DS_Store
+.idea/
+.vscode/
+# release artifacts
+*.zip
