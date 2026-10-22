@@ -1,6 +1,6 @@
 [project]
 name = "hardrock-nba-parlay-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "Research exactly-three-leg NBA parlays on Hard Rock Bet Florida: odds, injury context, correlation checks, and a user-confirmed wager ledger with a daily budget. MCP server + CLI."
 readme = "README.md"
 requires-python = ">=3.12"

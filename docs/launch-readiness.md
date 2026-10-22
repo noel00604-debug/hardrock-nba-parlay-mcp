@@ -93,8 +93,8 @@ Live evidence added 2026-10-19 about 22:00 ET (owner's free Starter key stored i
 | 13.D hosted MCP with Streamable HTTP and OAuth, per-user isolation | PASS locally over real HTTP; deployment, TLS and backup restore BLOCKED on hosting |
 | 13.E test installation | Claude Code: PASS (validate --strict, --plugin-dir, stdio Connected). claude.ai ZIP upload, Connectors tab, fresh conversation: NOT TESTED (owner's account) |
 | 13.F directory submission materials | BLOCKED (owner): public GitHub repo, support contact, privacy policy URL, reviewer test account, use cases ready in `docs/use-cases.md` |
-| 13.G direct-install route | PASS (files); commands need the public repository |
+| 13.G direct-install route | PASS (verified 2026-10-21): public repo https://github.com/noel00604-debug/hardrock-nba-parlay-mcp; `claude plugin marketplace add noel00604-debug/hardrock-nba-parlay-mcp` and `claude plugin install nba-three-leg-parlays@hardrock-nba-parlay-marketplace` installed 0.1.0 in a scratch project; `uvx --from git+...@v0.1.0 hrnba --help` ran from a clean cache. Self-hosted: the plugin starts the server locally; claude.ai, Desktop and Cowork still need a hosted server |
 | 13.G provider rights for multiple users | documented in `docs/costs.md` and `docs/publication-readiness.md` |
 | 13.H two-account isolation | PASS in tests (ASGI OAuth flow with two users; PostgreSQL tenant check); NOT TESTED on a deployed host |
-| 13.H clean-environment install | NOT TESTED (needs the public repository) |
-| Publication status | NOT SUBMITTED |
+| 13.H clean-environment install | PASS for the Claude Code direct route (clean uv cache, scratch project, 2026-10-21); claude.ai upload NOT TESTED |
+| Publication status | Posted on GitHub for direct install (2026-10-21). Anthropic directory: NOT SUBMITTED |

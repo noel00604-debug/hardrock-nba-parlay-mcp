@@ -5,7 +5,7 @@ Status of each surface (filled in by the integration lead after testing):
 | Surface | Route | Tested |
 |---|---|---|
 | Claude Code, development (`--plugin-dir`) | section 1 | TESTED 2026-10-19: bundle loads on 2.1.123; `claude plugin validate --strict` passes on 2.1.299; stdio server registered with `claude mcp add --scope user` shows Connected |
-| Claude Code, direct marketplace install | section 3 | NOT TESTED (no public repository yet) |
+| Claude Code, direct marketplace install | section 3 | TESTED 2026-10-21: marketplace add + install from the public GitHub repo (scratch project, local scope) |
 | claude.ai web, Upload plugin ZIP plus Connectors tab | section 2 | NOT TESTED (needs the owner's account; ZIP built at dist/nba-three-leg-parlays-0.1.0.zip) |
 | Claude Desktop (same account plugin as claude.ai) | section 2 | NOT TESTED |
 | Cowork | section 2 (plugin syncs from the account; connect from Connectors tab) | NOT TESTED |

@@ -369,6 +369,7 @@ class Database:
             "postgresql" if url.startswith("postgres") else "sqlite" if url.startswith("sqlite") else "other"
         )
         if self.kind == "sqlite":
+            _ensure_sqlite_parent(url)
             self.engine: Engine = create_engine(url, future=True)
             _install_sqlite_hooks(self.engine)
         else:
@@ -501,6 +502,16 @@ class Database:
             res = conn.execute(users.delete().where(users.c.user_id == user_id))
             counts["users"] = res.rowcount or 0
         return counts
+
+
+def _ensure_sqlite_parent(url: str) -> None:
+    """Create the folder that holds a file-backed SQLite database so a fresh install never fails on open."""
+    from pathlib import Path
+
+    path = url[len("sqlite:///") :] if url.startswith("sqlite:///") else ""
+    if not path or path.startswith(":memory:") or path.startswith("file:"):
+        return
+    Path(path).expanduser().parent.mkdir(parents=True, exist_ok=True)
 
 
 def _install_sqlite_hooks(engine: Engine) -> None:

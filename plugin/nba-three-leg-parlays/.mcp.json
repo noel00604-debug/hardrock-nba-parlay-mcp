@@ -4,7 +4,7 @@
       "command": "uvx",
       "args": [
         "--from",
-        "git+https://github.com/noel00604-debug/hardrock-nba-parlay-mcp@v0.1.0",
+        "git+https://github.com/noel00604-debug/hardrock-nba-parlay-mcp@v0.1.1",
         "hrnba",
         "serve",
         "--transport",

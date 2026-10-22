@@ -2,6 +2,12 @@
 
 All notable changes to the nba-three-leg-parlays plugin bundle are recorded here.
 
+## 0.1.1 (2026-10-21)
+
+- Self-hosted plugin: the bundle launches the server locally with uvx from the tagged GitHub release and asks installers for their own The Odds API key.
+- The server creates a missing database folder on first start.
+- Published to https://github.com/noel00604-debug/hardrock-nba-parlay-mcp (direct install route; not an Anthropic directory listing).
+
 ## 0.1.0 (unreleased)
 
 Initial bundle. Not yet published to any marketplace or to the Anthropic directory.

@@ -97,7 +97,7 @@ def test_manifest_fields_exact() -> None:
     manifest = json.loads((PLUGIN_DIR / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
     assert manifest["name"] == "nba-three-leg-parlays"
     assert manifest["displayName"] == "NBA Three-Leg Parlay Analyst"
-    assert manifest["version"] == "0.1.0"
+    assert manifest["version"] == "0.1.1"
     assert manifest["description"] == EXPECTED_DESCRIPTION
     assert manifest["author"] == {"name": "Noel Fernandez"}
     assert manifest["license"] == "MIT"
@@ -127,7 +127,7 @@ def test_mcp_json_self_hosted_stdio_entry() -> None:
     assert entry["command"] == "uvx"
     assert entry["args"] == [
         "--from",
-        "git+https://github.com/noel00604-debug/hardrock-nba-parlay-mcp@v0.1.0",
+        "git+https://github.com/noel00604-debug/hardrock-nba-parlay-mcp@v0.1.1",
         "hrnba",
         "serve",
         "--transport",

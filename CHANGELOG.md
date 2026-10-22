@@ -3,6 +3,12 @@
 Project-level changelog for hardrock-nba-parlay-mcp (server, CLI, docs, deployment). The
 plugin bundle keeps its own `plugin/nba-three-leg-parlays/CHANGELOG.md`.
 
+## 0.1.1 (2026-10-21)
+
+- Self-hosted plugin: the bundle launches the server locally with uvx from the tagged GitHub release and asks installers for their own The Odds API key.
+- The server creates a missing database folder on first start.
+- Published to https://github.com/noel00604-debug/hardrock-nba-parlay-mcp (direct install route; not an Anthropic directory listing).
+
 ## 0.1.0 (unreleased, in build since 2026-10-19)
 
 - Foundation: `schemas.py`, `config.py`, `db.py`, `errors.py`, `docs/ARCHITECTURE.md`.
