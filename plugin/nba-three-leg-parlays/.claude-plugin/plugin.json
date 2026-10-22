@@ -6,6 +6,8 @@
   "author": {
     "name": "Noel Fernandez"
   },
+  "homepage": "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp",
+  "repository": "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp",
   "license": "MIT",
   "keywords": [
     "nba",
@@ -17,5 +19,14 @@
     "odds",
     "injury-report",
     "budget-ledger"
-  ]
+  ],
+  "userConfig": {
+    "ODDS_API_KEY": {
+      "type": "string",
+      "title": "The Odds API key",
+      "description": "Your own key from https://the-odds-api.com (the free Starter plan works). It is passed to the local server only; nothing is sent to the plugin author.",
+      "required": false,
+      "sensitive": true
+    }
+  }
 }

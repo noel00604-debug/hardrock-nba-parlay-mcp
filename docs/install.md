@@ -76,10 +76,10 @@ never writes to a real ledger (`db.Database` refuses FIXTURE records unless open
 
 ## 3. Claude Code: direct install from the GitHub marketplace
 
-Requires the public repository. Replace OWNER/REPO with the repository coordinates:
+Requires the public repository. Replace noel00604-debug/hardrock-nba-parlay-mcp with the repository coordinates:
 
 ```
-claude plugin marketplace add OWNER/REPO
+claude plugin marketplace add noel00604-debug/hardrock-nba-parlay-mcp
 claude plugin install nba-three-leg-parlays@hardrock-nba-parlay-marketplace
 ```
 
@@ -87,7 +87,7 @@ claude plugin install nba-three-leg-parlays@hardrock-nba-parlay-marketplace
 hardrock-nba-parlay-marketplace`; the install prints `Successfully installed plugin:
 nba-three-leg-parlays@hardrock-nba-parlay-marketplace (scope: user)`. Then `/mcp` to sign
 in. On Claude Code 2.1.292 or later the one-shot form is
-`claude plugin install nba-three-leg-parlays --marketplace OWNER/REPO`.
+`claude plugin install nba-three-leg-parlays --marketplace noel00604-debug/hardrock-nba-parlay-mcp`.
 
 This is direct distribution. It is not an Anthropic-reviewed listing and must not be
 described as one.
@@ -120,7 +120,7 @@ install a specific version:
 
 ```
 claude plugin marketplace remove hardrock-nba-parlay-marketplace
-claude plugin marketplace add OWNER/REPO#nba-three-leg-parlays--v0.1.0
+claude plugin marketplace add noel00604-debug/hardrock-nba-parlay-mcp#nba-three-leg-parlays--v0.1.0
 claude plugin install nba-three-leg-parlays@hardrock-nba-parlay-marketplace
 ```
 

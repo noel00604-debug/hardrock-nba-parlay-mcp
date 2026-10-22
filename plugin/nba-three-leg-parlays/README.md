@@ -42,11 +42,12 @@ report. Screenshots stay in the chat; Claude extracts the fields, you confirm th
 only the confirmed fields are sent. No chat history, memories, or other attachments are
 sent.
 
-The server is hosted by the plugin author. It calls The Odds API (for Hard Rock Florida
-and reference prices and NBA scores) and reads the official NBA injury report PDFs. Your
-records (candidates, reservations, bets, settlements, costs) are stored under your own
-server account and are not visible to other users. You can export or delete them from the
-server's account page. See the project's privacy policy document for retention details.
+The server runs on your own computer (Claude Code starts it for you). It calls The Odds
+API with your own key (for Hard Rock Florida and reference prices and NBA scores) and reads
+the official NBA injury report PDFs. Your records (candidates, reservations, bets,
+settlements, costs) are stored in a local file under your home folder and never leave your
+machine. Delete that file to delete everything. See the project's privacy policy document
+for details.
 
 ## AI involvement
 
@@ -64,38 +65,37 @@ default is $10 per day and the tool never increases it for you.
 
 ## Requirements
 
-- Your own Claude account on a paid plan (Pro, Max, Team, or Enterprise) with plugins
-  enabled. Using this plugin does not give you access to the author's Claude account.
-- Your own account on the connector's server, created on its sign-up page the first time
-  you connect. Each account has its own budget, records, and (optionally) its own
-  The Odds API key.
-- Installing the plugin does not sign you in to anything. The connector must show
-  Connected before prices, injuries, or your ledger are available.
+- Your own Claude account on a paid plan with plugins enabled, and Claude Code on your
+  computer. This is a self-hosted plugin: the server runs on your own machine, so it works
+  in Claude Code (and in Cowork sessions that run locally). It does not work in claude.ai
+  chat, Claude Desktop, or on a phone until a hosted server exists.
+- The `uv` tool (https://docs.astral.sh/uv/), which downloads Python and the server on
+  first use. Nothing else to install.
+- Your own free The Odds API key from https://the-odds-api.com (the Starter plan, 500
+  credits a month, is enough for a few games a day). Claude Code asks for it when the
+  plugin is installed and passes it only to the local server. Without a key the tool
+  still works in manual mode: you type the prices from the Hard Rock app.
+
+Your records stay in a file on your computer (`~/.hardrock-nba-parlay/local.db`). Nothing
+is sent to the plugin author.
 
 ## Install
 
-Three routes exist. Only the first two can be used before the directory listing is
-published.
-
 ### (a) Direct install from the GitHub marketplace (Claude Code)
 
-Add the marketplace from the GitHub repository `OWNER/REPO`, then install the plugin:
-
 ```
-claude plugin marketplace add OWNER/REPO
+claude plugin marketplace add noel00604-debug/hardrock-nba-parlay-mcp
 claude plugin install nba-three-leg-parlays@hardrock-nba-parlay-marketplace
 ```
 
-Then open a session and run `/mcp`, choose `plugin:nba-three-leg-parlays:nba-three-leg-parlays`,
-and sign in through the browser. This is a direct install; it is not an Anthropic-reviewed
-directory listing.
+Claude Code prompts for your Odds API key (optional) and starts the local server for you.
+This is a direct install; it is not an Anthropic-reviewed directory listing.
 
-### (b) Upload the ZIP to claude.ai
+### (b) Run the server yourself
 
-Build or download `nba-three-leg-parlays-<version>.zip`, then in claude.ai go to
-Customize > Plugins > Add > Upload plugin and select the file. Open the plugin's
-Connectors tab, add the `nba-three-leg-parlays` connector, and sign in. The uploaded
-plugin lives on your own account and is not reviewed by Anthropic.
+Clone `https://github.com/noel00604-debug/hardrock-nba-parlay-mcp`, then follow `docs/day-one-runbook.md` in the
+repository. The server registers with `claude mcp add` and the skill loads from
+`~/.claude/skills`.
 
 ### (c) Anthropic directory
 

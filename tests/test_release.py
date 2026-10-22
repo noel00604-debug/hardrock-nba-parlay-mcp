@@ -102,8 +102,12 @@ def test_manifest_fields_exact() -> None:
     assert manifest["author"] == {"name": "Noel Fernandez"}
     assert manifest["license"] == "MIT"
     assert isinstance(manifest["keywords"], list) and manifest["keywords"]
-    for absent in ("homepage", "repository", "supportUrl", "privacyPolicyUrl", "documentationUrl", "icon"):
-        assert absent not in manifest, f"{absent} must be stamped later by scripts/stamp_release.py"
+    assert manifest["homepage"] == "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp"
+    assert manifest["repository"] == "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp"
+    for absent in ("supportUrl", "privacyPolicyUrl", "documentationUrl", "icon"):
+        assert absent not in manifest, f"{absent} is set only when the owner publishes those pages"
+    key_cfg = manifest["userConfig"]["ODDS_API_KEY"]
+    assert key_cfg["type"] == "string" and key_cfg["sensitive"] is True and key_cfg["required"] is False
     assert re.fullmatch(r"[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?", manifest["name"])
     assert not manifest["name"].startswith(("claude-", "anthropic-", "anthropics-", "cc-plugin-"))
 
@@ -113,11 +117,23 @@ def test_only_manifest_inside_claude_plugin_dir() -> None:
     assert names == ["plugin.json"]
 
 
-def test_mcp_json_http_entry_with_empty_url() -> None:
+def test_mcp_json_self_hosted_stdio_entry() -> None:
     mcp = json.loads((PLUGIN_DIR / ".mcp.json").read_text(encoding="utf-8"))
     assert list(mcp) == ["mcpServers"]
     entry = mcp["mcpServers"]["nba-three-leg-parlays"]
-    assert entry == {"type": "http", "url": ""}
+    assert "url" not in entry and "type" not in entry, (
+        "self-hosted bundle: a local stdio server, not a remote URL"
+    )
+    assert entry["command"] == "uvx"
+    assert entry["args"] == [
+        "--from",
+        "git+https://github.com/noel00604-debug/hardrock-nba-parlay-mcp@v0.1.0",
+        "hrnba",
+        "serve",
+        "--transport",
+        "stdio",
+    ]
+    assert entry["env"] == {"HRNBA_ODDS_API_KEY": "${user_config.ODDS_API_KEY}"}
 
 
 def test_required_files_and_forbidden_files() -> None:
@@ -145,8 +161,17 @@ def test_plugin_readme_word_count_and_content() -> None:
     assert _words_outside_code_blocks(readme) > 40 * 5, (
         "README must be well over 40 words outside code blocks"
     )
-    for phrase in ("never", "1-833-PLAYWISE", "21", "AI", "Upload plugin", "not yet submitted", "OWNER/REPO"):
+    for phrase in (
+        "never",
+        "1-833-PLAYWISE",
+        "21",
+        "AI",
+        "not yet submitted",
+        "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp",
+        "claude plugin marketplace add",
+    ):
         assert phrase in readme, phrase
+    assert "OWNER/REPO" not in readme, "the repository has been stamped"
     # The token is stamped verbatim; a sentence telling the reader to replace it would read as
     # nonsense in the shipped README (review-release.md D4), and stamp_release.py refuses it.
     assert not re.search(r"replace\s+`?OWNER/REPO`?", readme, re.IGNORECASE)
@@ -270,7 +295,7 @@ def test_marketplace_manifest() -> None:
         (PROJECT_ROOT / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8")
     )
     assert marketplace["name"] == "hardrock-nba-parlay-marketplace"
-    assert marketplace["owner"] == {"name": "Noel Fernandez"}
+    assert marketplace["owner"] == {"name": "Noel Fernandez", "url": "https://github.com/noel00604-debug"}
     assert marketplace["description"]
     [entry] = marketplace["plugins"]
     assert entry["name"] == "nba-three-leg-parlays"
@@ -330,10 +355,30 @@ def test_build_plugin_zip_refuses_bin_and_ds_store(tmp_path: Path) -> None:
     assert not any(e.arcname.endswith(".DS_Store") for e in entries)
 
 
-def test_stamp_release_rewrites_bundle(tmp_path: Path) -> None:
-    stamp = _load_script("stamp_release")
+def _hosted_prestamp_copy(tmp_path: Path) -> Path:
+    """A copy of the live bundle reverted to the pre-stamp HOSTED shape that scripts/stamp_release.py expects."""
     copy = tmp_path / "nba-three-leg-parlays"
     shutil.copytree(PLUGIN_DIR, copy)
+    (copy / ".mcp.json").write_text(
+        json.dumps({"mcpServers": {"nba-three-leg-parlays": {"type": "http", "url": ""}}}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    manifest_path = copy / ".claude-plugin" / "plugin.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest.pop("homepage", None)
+    manifest.pop("repository", None)
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    readme = copy / "README.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8").replace("noel00604-debug/hardrock-nba-parlay-mcp", "OWNER/REPO"),
+        encoding="utf-8",
+    )
+    return copy
+
+
+def test_stamp_release_rewrites_bundle(tmp_path: Path) -> None:
+    stamp = _load_script("stamp_release")
+    copy = _hosted_prestamp_copy(tmp_path)
     rc = stamp.main(
         [
             "--plugin-dir",
@@ -363,19 +408,16 @@ def test_stamp_release_rewrites_bundle(tmp_path: Path) -> None:
     readme = (copy / "README.md").read_text(encoding="utf-8")
     assert "OWNER/REPO" not in readme
     assert "claude plugin marketplace add noelfernandez/hardrock-nba-parlay-mcp" in readme
-    # The committed bundle is untouched.
-    assert (
-        json.loads((PLUGIN_DIR / ".mcp.json").read_text(encoding="utf-8"))["mcpServers"][
-            "nba-three-leg-parlays"
-        ]["url"]
-        == ""
-    )
+    # The committed (self-hosted) bundle is untouched.
+    live = json.loads((PLUGIN_DIR / ".mcp.json").read_text(encoding="utf-8"))["mcpServers"][
+        "nba-three-leg-parlays"
+    ]
+    assert live["command"] == "uvx" and "url" not in live
 
 
 def test_stamp_release_dry_run_writes_nothing(tmp_path: Path) -> None:
     stamp = _load_script("stamp_release")
-    copy = tmp_path / "nba-three-leg-parlays"
-    shutil.copytree(PLUGIN_DIR, copy)
+    copy = _hosted_prestamp_copy(tmp_path)
     before = {p: p.read_bytes() for p in copy.rglob("*") if p.is_file()}
     rc = stamp.main(
         [
@@ -420,8 +462,7 @@ def test_stamp_release_refuses_placeholders_and_non_https(
     tmp_path: Path, server_url: str, repo_url: str
 ) -> None:
     stamp = _load_script("stamp_release")
-    copy = tmp_path / "nba-three-leg-parlays"
-    shutil.copytree(PLUGIN_DIR, copy)
+    copy = _hosted_prestamp_copy(tmp_path)
     rc = stamp.main(["--plugin-dir", str(copy), "--server-url", server_url, "--repo-url", repo_url])
     assert rc == 1
     assert (
@@ -434,8 +475,7 @@ def test_stamp_release_refuses_placeholders_and_non_https(
 
 def test_stamp_release_refuses_readme_with_replace_instruction(tmp_path: Path) -> None:
     stamp = _load_script("stamp_release")
-    copy = tmp_path / "nba-three-leg-parlays"
-    shutil.copytree(PLUGIN_DIR, copy)
+    copy = _hosted_prestamp_copy(tmp_path)
     readme = copy / "README.md"
     readme.write_text(
         readme.read_text(encoding="utf-8") + "\nOnce the repository exists, replace OWNER/REPO with it.\n",

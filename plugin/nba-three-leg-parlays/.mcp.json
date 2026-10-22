@@ -1,8 +1,18 @@
 {
   "mcpServers": {
     "nba-three-leg-parlays": {
-      "type": "http",
-      "url": ""
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/noel00604-debug/hardrock-nba-parlay-mcp@v0.1.0",
+        "hrnba",
+        "serve",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "HRNBA_ODDS_API_KEY": "${user_config.ODDS_API_KEY}"
+      }
     }
   }
 }

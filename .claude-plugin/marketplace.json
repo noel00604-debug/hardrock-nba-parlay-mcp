@@ -1,7 +1,8 @@
 {
   "name": "hardrock-nba-parlay-marketplace",
   "owner": {
-    "name": "Noel Fernandez"
+    "name": "Noel Fernandez",
+    "url": "https://github.com/noel00604-debug"
   },
   "description": "Claude Code marketplace for the NBA Three-Leg Parlay Analyst plugin: research exactly three-leg NBA parlays on Hard Rock Bet Florida with a hosted MCP connector, a daily budget ledger, and user-confirmed wager tracking.",
   "plugins": [
