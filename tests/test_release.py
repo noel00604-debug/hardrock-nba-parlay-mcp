@@ -109,8 +109,17 @@ def test_manifest_fields_exact() -> None:
     assert isinstance(manifest["keywords"], list) and manifest["keywords"]
     assert manifest["homepage"] == "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp"
     assert manifest["repository"] == "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp"
-    for absent in ("supportUrl", "privacyPolicyUrl", "documentationUrl", "icon"):
-        assert absent not in manifest, f"{absent} is set only when the owner publishes those pages"
+    assert manifest["supportUrl"] == "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/issues"
+    assert (
+        manifest["privacyPolicyUrl"]
+        == "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/blob/main/docs/privacy-policy.md"
+    )
+    assert (
+        manifest["termsOfServiceUrl"]
+        == "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/blob/main/docs/terms.md"
+    )
+    assert manifest["documentationUrl"] == "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp#readme"
+    assert "icon" not in manifest
     key_cfg = manifest["userConfig"]["ODDS_API_KEY"]
     assert key_cfg["type"] == "string" and key_cfg["sensitive"] is True and key_cfg["required"] is False
     assert re.fullmatch(r"[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?", manifest["name"])
@@ -370,8 +379,8 @@ def _hosted_prestamp_copy(tmp_path: Path) -> Path:
     )
     manifest_path = copy / ".claude-plugin" / "plugin.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    manifest.pop("homepage", None)
-    manifest.pop("repository", None)
+    for key in ("homepage", "repository", "documentationUrl", "supportUrl", "privacyPolicyUrl", "termsOfServiceUrl"):
+        manifest.pop(key, None)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     readme = copy / "README.md"
     readme.write_text(
@@ -536,9 +545,9 @@ def test_docs_exist_and_carry_required_markers() -> None:
             "export_my_data",
         ],
         "costs.md": ["500", "$30", "20,000", "balldontlie", "$9.99", "100 users", "Railway", "30-day"],
-        "privacy-policy.md": ["OWNER TO FILL IN", "argon2id", "The Odds API", "Delete"],
-        "terms.md": ["OWNER TO FILL IN", "never places", "21"],
-        "support.md": ["OWNER TO FILL IN"],
+        "privacy-policy.md": ["github.com/noel00604-debug", "argon2id", "The Odds API", "Delete"],
+        "terms.md": ["github.com/noel00604-debug", "never places", "21"],
+        "support.md": ["github.com/noel00604-debug"],
         "test-account.md": ["signup", "owner's ledger", "Test & launch"],
         "use-cases.md": [
             "PENDING INTEGRATION TEST",

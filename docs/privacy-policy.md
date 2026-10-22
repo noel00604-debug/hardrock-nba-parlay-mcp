@@ -10,7 +10,7 @@ Last updated: 2026-10-19 (draft, not yet published)
 ## Who operates this software
 
 The NBA Three-Leg Parlay Analyst plugin and its connector server are operated by Noel
-Fernandez, an individual. Contact: [OWNER TO FILL IN: email address or issue tracker URL].
+Fernandez, an individual. Contact: the project's issue tracker at https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/issues.
 
 ## What the software is
 

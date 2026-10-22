@@ -1,7 +1,6 @@
 # Support
 
-Contact for product and security concerns: [OWNER TO FILL IN before submission: an email
-address the owner reads, or the public GitHub Issues URL once the repository is public].
+Contact for product and security concerns: the GitHub issue tracker at https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/issues (open an issue; for a security report, open an issue titled "Security" without the details and the maintainer will reply with a private channel).
 This contact is also the `supportUrl` stamped into the plugin manifest and the security
 vulnerability reporting channel required by the Anthropic Software Directory Terms.
 

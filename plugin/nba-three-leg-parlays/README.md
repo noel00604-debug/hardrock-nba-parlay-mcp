@@ -116,6 +116,6 @@ workflow maps, and settlement notes are in `skills/nba-three-leg-parlays/referen
 
 ## Support
 
-Report problems through the support channel listed in the project's `docs/support.md`
-(the owner will fill in the contact before publication). Security reports are welcome
-through the same channel.
+Report problems on the project's issue tracker: https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/issues. Security reports are
+welcome there too: open an issue titled "Security" without the details and the maintainer
+will reply with a private channel.

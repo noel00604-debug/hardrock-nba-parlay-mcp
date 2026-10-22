@@ -52,4 +52,4 @@ Last updated: 2026-10-19 (draft, not yet published)
 10. No endorsement. This software is not affiliated with, sponsored by, or endorsed by
     the NBA, Hard Rock Bet, the Seminole Tribe of Florida, The Odds API, or Anthropic.
 
-11. Contact. [OWNER TO FILL IN: email address or issue tracker URL].
+11. Contact. the project's issue tracker at https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/issues.

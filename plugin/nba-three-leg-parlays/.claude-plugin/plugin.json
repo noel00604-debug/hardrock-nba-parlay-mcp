@@ -8,6 +8,10 @@
   },
   "homepage": "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp",
   "repository": "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp",
+  "documentationUrl": "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp#readme",
+  "supportUrl": "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/issues",
+  "privacyPolicyUrl": "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/blob/main/docs/privacy-policy.md",
+  "termsOfServiceUrl": "https://github.com/noel00604-debug/hardrock-nba-parlay-mcp/blob/main/docs/terms.md",
   "license": "MIT",
   "keywords": [
     "nba",
