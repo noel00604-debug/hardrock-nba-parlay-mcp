@@ -19,6 +19,11 @@ from types import ModuleType
 import pytest
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PLUGIN_VERSION = json.loads(
+    (PROJECT_ROOT / "plugin" / "nba-three-leg-parlays" / ".claude-plugin" / "plugin.json").read_text(
+        encoding="utf-8"
+    )
+)["version"]
 PLUGIN_DIR = PROJECT_ROOT / "plugin" / "nba-three-leg-parlays"
 SKILL_DIR = PLUGIN_DIR / "skills" / "nba-three-leg-parlays"
 SCRIPTS = PROJECT_ROOT / "scripts"
@@ -330,7 +335,7 @@ def test_build_plugin_zip_dry_run_and_real_build(tmp_path: Path, capsys: pytest.
     assert not list(tmp_path.iterdir())
 
     assert build.main(["--dist-dir", str(tmp_path)]) == 0
-    zip_path = tmp_path / "nba-three-leg-parlays-0.1.0.zip"
+    zip_path = tmp_path / f"nba-three-leg-parlays-{PLUGIN_VERSION}.zip"
     assert zip_path.is_file()
     with zipfile.ZipFile(zip_path) as archive:
         names = archive.namelist()
